@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - N/A
 
 ### Fixed
-- N/A
+- Runtime argument validation for tool execution to prevent TypeErrors when LLM provides malformed arguments (#168)
 
 ### Security
 - N/A
