@@ -80,14 +80,11 @@ class ToolRegistry:
             ValueError: If validation fails (missing required, unexpected params, type mismatch)
         """
         # Filter out 'self' and 'cls' from inputs if present
-        filtered_inputs = {
-            k: v for k, v in inputs.items() if k not in ("self", "cls")
-        }
+        filtered_inputs = {k: v for k, v in inputs.items() if k not in ("self", "cls")}
 
         # Check for **kwargs in signature
         has_var_keyword = any(
-            p.kind == inspect.Parameter.VAR_KEYWORD
-            for p in sig.parameters.values()
+            p.kind == inspect.Parameter.VAR_KEYWORD for p in sig.parameters.values()
         )
 
         # Get valid parameter names (excluding self/cls)
@@ -107,16 +104,12 @@ class ToolRegistry:
         for param_name, param in sig.parameters.items():
             if param_name in ("self", "cls"):
                 continue
-            if (
-                param.default == inspect.Parameter.empty
-                and param_name not in filtered_inputs
-            ):
+            if param.default == inspect.Parameter.empty and param_name not in filtered_inputs:
                 missing_required.append(param_name)
 
         if missing_required:
             raise ValueError(
-                f"Tool '{tool_name}' missing required argument(s): "
-                f"{', '.join(missing_required)}"
+                f"Tool '{tool_name}' missing required argument(s): {', '.join(missing_required)}"
             )
 
         # Check for unexpected parameters (only if no **kwargs)
@@ -137,9 +130,7 @@ class ToolRegistry:
             bound.apply_defaults()
         except TypeError as e:
             # This should rarely happen now, but handle edge cases
-            raise ValueError(
-                f"Tool '{tool_name}' argument binding failed: {str(e)}"
-            ) from e
+            raise ValueError(f"Tool '{tool_name}' argument binding failed: {str(e)}") from e
 
         # Type validation for provided parameters
         for param_name, param in sig.parameters.items():
@@ -179,7 +170,7 @@ class ToolRegistry:
                         f"got {type(value).__name__}"
                     )
 
-        return bound    
+        return bound
 
     def register_function(
         self,
